@@ -1,14 +1,22 @@
-import {View, Text} from 'react-native';
+import {View, Image, Dimensions, ScrollView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {getPopularMoviews} from '../services/services';
+
+import {getPopularTvSeries} from '../services/services';
+const {width} = Dimensions.get('window');
+const {height} = Dimensions.get('window');
 
 const Home = () => {
-  const [movie, setMovie] = useState('');
+  const [moviesImages, setMoviesImages] = useState([]);
 
   useEffect(() => {
-    getPopularMoviews()
+    //Getting Upcoming Movies
+    getPopularTvSeries()
       .then(movies => {
-        setMovie(movies[0].original_title);
+        const images = [];
+        movies.forEach(movie => {
+          images.push('https://image.tmdb.org/t/p/w500/' + movie.poster_path);
+        });
+        setMoviesImages(images);
       })
       .catch(err => {
         console.log('ErrorCallingMovies>>', err);
@@ -16,15 +24,43 @@ const Home = () => {
   }, []);
 
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Text>{movie}</Text>
+    <View style={style.sliderContainer}>
+      <ScrollView
+        pagingEnabled
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={style.sliderScroll}>
+        {moviesImages?.map((image, index) => (
+          <Image key={index} source={{uri: image}} style={style.sliderImage} />
+        ))}
+      </ScrollView>
     </View>
   );
 };
 
 export default Home;
+
+const style = StyleSheet.create({
+  sliderContainer: {
+    height: height / 1.8,
+    width,
+  },
+  sliderScroll: {
+    height: height / 1.8,
+    width,
+  },
+  sliderImage: {
+    height: height / 1.8,
+    width,
+    resizeMode: 'cover',
+  },
+  pagination: {
+    flexDirection: 'row',
+    position: 'absolute',
+    bottom: 0,
+    alignSelf: 'center',
+  },
+  paginationText: {
+    color: 'white',
+  },
+});
