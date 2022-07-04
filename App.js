@@ -1,7 +1,20 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View} from 'react-native';
+import {getPopularMoviews} from './services/services';
 
 const App = () => {
+  const [movie, setMovie] = useState('');
+
+  useEffect(() => {
+    getPopularMoviews()
+      .then(movies => {
+        setMovie(movies[0].original_title);
+      })
+      .catch(err => {
+        console.log('ErrorCallingMovies>>', err);
+      });
+  }, []);
+
   return (
     <View
       style={{
@@ -9,7 +22,7 @@ const App = () => {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text>Hello, world!</Text>
+      <Text>{movie}</Text>
     </View>
   );
 };
