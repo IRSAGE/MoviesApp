@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   Text,
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
@@ -25,6 +26,7 @@ const Home = () => {
   const [popularTvSeries, setPopularTvSeries] = useState();
   const [familyMovies, setFamilyMovies] = useState();
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getData()
@@ -47,6 +49,9 @@ const Home = () => {
       )
       .catch(err => {
         setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -60,43 +65,51 @@ const Home = () => {
   };
 
   return (
-    <ScrollView
-      showsHorizontalScrollIndicator={false}
-      style={{flex: 1, bottom: '2%'}}>
-      {moviesImages && (
-        <View style={style.sliderContainer}>
-          <ScrollView
-            pagingEnabled
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={style.sliderScroll}>
-            {moviesImages?.map((image, index) => (
-              <Image
-                key={index}
-                resizeMode="cover"
-                source={{uri: image}}
-                style={style.sliderImage}
-              />
-            ))}
-          </ScrollView>
+    <>
+      {loading ? (
+        <View style={style.loadingView}>
+          <ActivityIndicator size="large" color="green" />
         </View>
+      ) : (
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          style={{flex: 1, bottom: '2%'}}>
+          {moviesImages && (
+            <View style={style.sliderContainer}>
+              <ScrollView
+                pagingEnabled
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                style={style.sliderScroll}>
+                {moviesImages?.map((image, index) => (
+                  <Image
+                    key={index}
+                    resizeMode="cover"
+                    source={{uri: image}}
+                    style={style.sliderImage}
+                  />
+                ))}
+              </ScrollView>
+            </View>
+          )}
+          {popularMovies && (
+            <View>
+              <List title="Popular Movies" content={popularMovies} />
+            </View>
+          )}
+          {popularTvSeries && (
+            <View>
+              <List title="Popular Tv Shows" content={popularTvSeries} />
+            </View>
+          )}
+          {familyMovies && (
+            <View>
+              <List title="Family Movies" content={familyMovies} />
+            </View>
+          )}
+        </ScrollView>
       )}
-      {popularMovies && (
-        <View>
-          <List title="Popular Movies" content={popularMovies} />
-        </View>
-      )}
-      {popularTvSeries && (
-        <View>
-          <List title="Popular Tv Shows" content={popularTvSeries} />
-        </View>
-      )}
-      {familyMovies && (
-        <View>
-          <List title="Family Movies" content={familyMovies} />
-        </View>
-      )}
-    </ScrollView>
+    </>
   );
 };
 
@@ -123,5 +136,10 @@ const style = StyleSheet.create({
   },
   paginationText: {
     color: 'white',
+  },
+  loadingView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
