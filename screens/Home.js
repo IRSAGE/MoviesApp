@@ -17,6 +17,7 @@ import {
   getUpcomingMoviews,
 } from '../services/services';
 import List from '../components/List';
+import Error from '../components/Error';
 const {width} = Dimensions.get('window');
 const {height} = Dimensions.get('window');
 
@@ -66,11 +67,12 @@ const Home = () => {
 
   return (
     <>
-      {loading ? (
+      {loading && (
         <View style={style.loadingView}>
           <ActivityIndicator size="large" color="green" />
         </View>
-      ) : (
+      )}
+      {!loading && !error && (
         <ScrollView
           showsHorizontalScrollIndicator={false}
           style={{flex: 1, bottom: '2%'}}>
@@ -109,6 +111,7 @@ const Home = () => {
           )}
         </ScrollView>
       )}
+      {error && <Error />}
     </>
   );
 };
