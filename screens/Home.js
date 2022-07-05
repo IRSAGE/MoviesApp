@@ -10,6 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 
 import {
+  getFamilyMovies,
   getPopularMoviews,
   getPopularTvSeries,
   getUpcomingMoviews,
@@ -19,67 +20,82 @@ const {width} = Dimensions.get('window');
 const {height} = Dimensions.get('window');
 
 const Home = () => {
-  const [moviesImages, setMoviesImages] = useState([]);
-  const [popularMovies, setPopularMovies] = useState([]);
-  const [popularTvs, setPopularTvs] = useState([]);
+  const [moviesImages, setMoviesImages] = useState();
+  const [popularMovies, setPopularMovies] = useState();
+  const [popularTvSeries, setPopularTvSeries] = useState();
+  const [familyMovies, setFamilyMovies] = useState();
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    //Getting Upcoming Movies
-    getUpcomingMoviews()
-      .then(movies => {
-        const images = [];
-        movies.forEach(movie => {
-          images.push('https://image.tmdb.org/t/p/w500/' + movie.poster_path);
-        });
-        setMoviesImages(images);
-      })
+    getData()
+      .then(
+        ([
+          familyMoviesData,
+          popularTvSeriesData,
+          popularMoviesData,
+          upcomingMoviesData,
+        ]) => {
+          const images = [];
+          upcomingMoviesData.forEach(movie => {
+            images.push('https://image.tmdb.org/t/p/w500/' + movie.poster_path);
+          });
+          setMoviesImages(images);
+          setFamilyMovies(familyMoviesData);
+          setPopularTvSeries(popularTvSeriesData);
+          setPopularMovies(popularMoviesData);
+        },
+      )
       .catch(err => {
-        console.log('ErrorCallingGetUpcomingMoviews>>', err);
-      });
-    //Getting Polular Movies
-    getPopularMoviews()
-      .then(movies => {
-        setPopularMovies(movies);
-      })
-      .catch(err => {
-        console.log('ErrorCallingGetPopularMoviews>>', err);
-      });
-    //Getting Polular Tv Series
-    getPopularTvSeries()
-      .then(movies => {
-        setPopularTvs(movies);
-      })
-      .catch(err => {
-        console.log('ErrorCallingGetPopularMoviews>>', err);
+        setError(true);
       });
   }, []);
+
+  const getData = () => {
+    return Promise.all([
+      getFamilyMovies(),
+      getPopularTvSeries(),
+      getPopularMoviews(),
+      getUpcomingMoviews(),
+    ]);
+  };
 
   return (
     <ScrollView
       showsHorizontalScrollIndicator={false}
       style={{flex: 1, bottom: '2%'}}>
-      <View style={style.sliderContainer}>
-        <ScrollView
-          pagingEnabled
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={style.sliderScroll}>
-          {moviesImages?.map((image, index) => (
-            <Image
-              key={index}
-              resizeMode="cover"
-              source={{uri: image}}
-              style={style.sliderImage}
-            />
-          ))}
-        </ScrollView>
-      </View>
-      <View>
-        <List title="Popular Movies" content={popularMovies} />
-      </View>
-      <View>
-        <List title="Popular Tv Series" content={popularTvs} />
-      </View>
+      {moviesImages && (
+        <View style={style.sliderContainer}>
+          <ScrollView
+            pagingEnabled
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={style.sliderScroll}>
+            {moviesImages?.map((image, index) => (
+              <Image
+                key={index}
+                resizeMode="cover"
+                source={{uri: image}}
+                style={style.sliderImage}
+              />
+            ))}
+          </ScrollView>
+        </View>
+      )}
+      {popularMovies && (
+        <View>
+          <List title="Popular Movies" content={popularMovies} />
+        </View>
+      )}
+      {popularTvSeries && (
+        <View>
+          <List title="Popular Tv Shows" content={popularTvSeries} />
+        </View>
+      )}
+      {familyMovies && (
+        <View>
+          <List title="Family Movies" content={familyMovies} />
+        </View>
+      )}
     </ScrollView>
   );
 };

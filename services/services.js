@@ -23,6 +23,13 @@ export const getPopularTvSeries = async () => {
 
 //Get Upcoming Tv  Series
 export const getUpcomingTvSeries = async () => {
-  const resp = await axios.get(`${apiUrl}/tv/upcoming ?${apiKey}`);
+  const resp = await axios.get(`${apiUrl}/tv/upcoming?${apiKey}`);
+  return resp.data.results;
+};
+//Get Family Movies
+export const getFamilyMovies = async () => {
+  const resp = await axios.get(
+    `${apiUrl}/discover/movie?${apiKey}&with_genres=10751`,
+  );
   return resp.data.results;
 };
