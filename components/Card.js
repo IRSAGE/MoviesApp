@@ -29,7 +29,7 @@ export default Card;
 
 const styles = StyleSheet.create({
   container: {
-    height: 200,
+    height: 210,
     padding: 5,
     position: 'relative',
     alignItems: 'center',
