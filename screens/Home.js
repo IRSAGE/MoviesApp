@@ -1,16 +1,31 @@
-import {View, Image, Dimensions, ScrollView, StyleSheet} from 'react-native';
+import {
+  View,
+  Image,
+  Dimensions,
+  ScrollView,
+  StyleSheet,
+  FlatList,
+  Text,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 
-import {getPopularTvSeries} from '../services/services';
+import {
+  getPopularMoviews,
+  getPopularTvSeries,
+  getUpcomingMoviews,
+} from '../services/services';
+import List from '../components/List';
 const {width} = Dimensions.get('window');
 const {height} = Dimensions.get('window');
 
 const Home = () => {
   const [moviesImages, setMoviesImages] = useState([]);
+  const [popularMovies, setPopularMovies] = useState([]);
+  const [popularTvs, setPopularTvs] = useState([]);
 
   useEffect(() => {
     //Getting Upcoming Movies
-    getPopularTvSeries()
+    getUpcomingMoviews()
       .then(movies => {
         const images = [];
         movies.forEach(movie => {
@@ -19,22 +34,53 @@ const Home = () => {
         setMoviesImages(images);
       })
       .catch(err => {
-        console.log('ErrorCallingMovies>>', err);
+        console.log('ErrorCallingGetUpcomingMoviews>>', err);
+      });
+    //Getting Polular Movies
+    getPopularMoviews()
+      .then(movies => {
+        setPopularMovies(movies);
+      })
+      .catch(err => {
+        console.log('ErrorCallingGetPopularMoviews>>', err);
+      });
+    //Getting Polular Tv Series
+    getPopularTvSeries()
+      .then(movies => {
+        setPopularTvs(movies);
+      })
+      .catch(err => {
+        console.log('ErrorCallingGetPopularMoviews>>', err);
       });
   }, []);
 
   return (
-    <View style={style.sliderContainer}>
-      <ScrollView
-        pagingEnabled
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={style.sliderScroll}>
-        {moviesImages?.map((image, index) => (
-          <Image key={index} source={{uri: image}} style={style.sliderImage} />
-        ))}
-      </ScrollView>
-    </View>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      style={{flex: 1, bottom: '2%'}}>
+      <View style={style.sliderContainer}>
+        <ScrollView
+          pagingEnabled
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={style.sliderScroll}>
+          {moviesImages?.map((image, index) => (
+            <Image
+              key={index}
+              resizeMode="cover"
+              source={{uri: image}}
+              style={style.sliderImage}
+            />
+          ))}
+        </ScrollView>
+      </View>
+      <View>
+        <List title="Popular Movies" content={popularMovies} />
+      </View>
+      <View>
+        <List title="Popular Tv Series" content={popularTvs} />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -52,7 +98,6 @@ const style = StyleSheet.create({
   sliderImage: {
     height: height / 1.8,
     width,
-    resizeMode: 'cover',
   },
   pagination: {
     flexDirection: 'row',
