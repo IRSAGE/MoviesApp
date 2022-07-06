@@ -9,6 +9,7 @@ import {
 import React, {useEffect, useState} from 'react';
 
 import {
+  getDocumentaryMovies,
   getFamilyMovies,
   getPopularMoviews,
   getPopularTvSeries,
@@ -24,6 +25,7 @@ const Home = ({navigation}) => {
   const [popularMovies, setPopularMovies] = useState();
   const [popularTvSeries, setPopularTvSeries] = useState();
   const [familyMovies, setFamilyMovies] = useState();
+  const [documentaryMovies, setDocumentalyMovies] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -35,6 +37,7 @@ const Home = ({navigation}) => {
           popularTvSeriesData,
           popularMoviesData,
           upcomingMoviesData,
+          documentaryMoviesData,
         ]) => {
           const images = [];
           upcomingMoviesData.forEach(movie => {
@@ -44,6 +47,7 @@ const Home = ({navigation}) => {
           setFamilyMovies(familyMoviesData);
           setPopularTvSeries(popularTvSeriesData);
           setPopularMovies(popularMoviesData);
+          setDocumentalyMovies(documentaryMoviesData);
         },
       )
       .catch(err => {
@@ -60,6 +64,7 @@ const Home = ({navigation}) => {
       getPopularTvSeries(),
       getPopularMoviews(),
       getUpcomingMoviews(),
+      getDocumentaryMovies(),
     ]);
   };
 
@@ -116,6 +121,15 @@ const Home = ({navigation}) => {
                 navigation={navigation}
                 title="Family Movies"
                 content={familyMovies}
+              />
+            </View>
+          )}
+          {documentaryMovies && (
+            <View>
+              <List
+                navigation={navigation}
+                title="Documentary Movies"
+                content={documentaryMovies}
               />
             </View>
           )}
