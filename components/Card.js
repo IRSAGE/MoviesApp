@@ -6,7 +6,7 @@ const Card = ({navigation, item}) => {
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={() => navigation.navigate('Details', {movieDetail: item})}>
+      onPress={() => navigation.navigate('Details', {movieId: item.id})}>
       <Image
         style={styles.image}
         resizeMode="cover"

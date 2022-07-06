@@ -34,7 +34,6 @@ const Home = ({navigation}) => {
       .then(
         ([
           familyMoviesData,
-          popularTvSeriesData,
           popularMoviesData,
           upcomingMoviesData,
           documentaryMoviesData,
@@ -45,7 +44,6 @@ const Home = ({navigation}) => {
           });
           setMoviesImages(images);
           setFamilyMovies(familyMoviesData);
-          setPopularTvSeries(popularTvSeriesData);
           setPopularMovies(popularMoviesData);
           setDocumentalyMovies(documentaryMoviesData);
         },
@@ -61,7 +59,6 @@ const Home = ({navigation}) => {
   const getData = () => {
     return Promise.all([
       getFamilyMovies(),
-      getPopularTvSeries(),
       getPopularMoviews(),
       getUpcomingMoviews(),
       getDocumentaryMovies(),
@@ -103,15 +100,6 @@ const Home = ({navigation}) => {
                 navigation={navigation}
                 title="Popular Movies"
                 content={popularMovies}
-              />
-            </View>
-          )}
-          {popularTvSeries && (
-            <View>
-              <List
-                navigation={navigation}
-                title="Popular Tv Shows"
-                content={popularTvSeries}
               />
             </View>
           )}
