@@ -8,7 +8,7 @@ const propTypes = {
   content: PropTypes.object,
 };
 
-const List = ({content, title}) => {
+const List = ({navigation, content, title}) => {
   return (
     <View style={styles.listView}>
       <Text style={styles.title}>{title}</Text>
@@ -16,7 +16,7 @@ const List = ({content, title}) => {
         data={content}
         horizontal={true}
         showsHorizontalScrollIndicator={false}
-        renderItem={({item}) => <Card item={item} />}
+        renderItem={({item}) => <Card navigation={navigation} item={item} />}
       />
     </View>
   );

@@ -2,9 +2,11 @@ import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 const placeHolderImage = require('../assets/images/placeholder.png');
 
-const Card = ({item}) => {
+const Card = ({navigation, item}) => {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => navigation.navigate('Details', {movieDetail: item})}>
       <Image
         style={styles.image}
         resizeMode="cover"

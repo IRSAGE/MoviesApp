@@ -4,8 +4,6 @@ import {
   Dimensions,
   ScrollView,
   StyleSheet,
-  FlatList,
-  Text,
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -21,7 +19,7 @@ import Error from '../components/Error';
 const {width} = Dimensions.get('window');
 const {height} = Dimensions.get('window');
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [moviesImages, setMoviesImages] = useState();
   const [popularMovies, setPopularMovies] = useState();
   const [popularTvSeries, setPopularTvSeries] = useState();
@@ -96,17 +94,29 @@ const Home = () => {
           )}
           {popularMovies && (
             <View>
-              <List title="Popular Movies" content={popularMovies} />
+              <List
+                navigation={navigation}
+                title="Popular Movies"
+                content={popularMovies}
+              />
             </View>
           )}
           {popularTvSeries && (
             <View>
-              <List title="Popular Tv Shows" content={popularTvSeries} />
+              <List
+                navigation={navigation}
+                title="Popular Tv Shows"
+                content={popularTvSeries}
+              />
             </View>
           )}
           {familyMovies && (
             <View>
-              <List title="Family Movies" content={familyMovies} />
+              <List
+                navigation={navigation}
+                title="Family Movies"
+                content={familyMovies}
+              />
             </View>
           )}
         </ScrollView>
