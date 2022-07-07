@@ -5,11 +5,13 @@ import {
   Image,
   View,
   Dimensions,
+  Text,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {getMovieDetails} from '../services/services';
 const placeHolderImage = require('../assets/images/placeholder.png');
 const {height} = Dimensions.get('window');
+import dateFormat from 'dateformat';
 
 const Details = ({route, navigation}) => {
   const movieId = route.params.movieId;
@@ -52,6 +54,34 @@ const Details = ({route, navigation}) => {
                 : placeHolderImage
             }
           />
+          <View style={styles.centeredView}>
+            <Text style={styles.movieName}>{moviesDetails.title}</Text>
+            {moviesDetails.genres && (
+              <View style={styles.genresView}>
+                {moviesDetails.genres.map(genre => {
+                  return (
+                    <Text style={styles.genresText} key={genre.id}>
+                      {genre.name}
+                    </Text>
+                  );
+                })}
+              </View>
+            )}
+            <View style={styles.ratingView}>
+              {Array(Math.round(moviesDetails.vote_average / 2))
+                .fill()
+                .map((_, i) => (
+                  <Text style={[styles.genresText, {fontSize: 25}]} key={i}>
+                    ⭐️
+                  </Text>
+                ))}
+            </View>
+            <Text style={styles.overview}>{moviesDetails.overview}</Text>
+            <Text style={styles.realeaseDate}>
+              {'Release Date: ' +
+                dateFormat(moviesDetails.release_date, 'mmmm ds, yyyy')}
+            </Text>
+          </View>
         </ScrollView>
       )}
     </>
@@ -66,17 +96,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   image: {
     height: height / 2.5,
   },
   movieName: {
-    position: 'absolute',
-    width: 100,
-    textAlign: 'center',
-    top: 20,
     fontWeight: 'bold',
+    fontSize: 18,
+    marginVertical: 15,
+    textAlign: 'center',
   },
   container: {
     flex: 1,
+  },
+  genresView: {
+    flexDirection: 'row',
+  },
+  genresText: {
+    fontWeight: 'bold',
+    marginRight: 5,
+  },
+  ratingView: {
+    flexDirection: 'row',
+    marginTop: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  overview: {
+    padding: 18,
+    textAlign: 'center',
+  },
+  realeaseDate: {
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
