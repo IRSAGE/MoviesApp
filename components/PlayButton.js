@@ -2,9 +2,9 @@ import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Icon} from 'react-native-vector-icons/Ionicons';
 
-const PlayButton = () => {
+const PlayButton = ({handlePress}) => {
   return (
-    <Pressable style={styles.button}>
+    <Pressable style={styles.button} onPress={handlePress}>
       <Text style={{fontSize: 11, fontWeight: 'bold', color: 'white'}}>
         Play
       </Text>

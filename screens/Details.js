@@ -6,6 +6,9 @@ import {
   View,
   Dimensions,
   Text,
+  Modal,
+  Pressable,
+  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {getMovieDetails} from '../services/services';
@@ -19,6 +22,7 @@ const Details = ({route, navigation}) => {
   const [moviesDetails, setMoviesDetails] = useState();
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     getMovieDetails(movieId)
@@ -33,6 +37,10 @@ const Details = ({route, navigation}) => {
       });
   }, [movieId]);
 
+  const videoShown = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <>
       {loading && (
@@ -41,52 +49,61 @@ const Details = ({route, navigation}) => {
         </View>
       )}
       {!loading && (
-        <ScrollView style={styles.container}>
-          <Image
-            style={styles.image}
-            resizeMode="cover"
-            source={
-              moviesDetails.poster_path
-                ? {
-                    uri:
-                      'https://image.tmdb.org/t/p/w500/' +
-                      moviesDetails.poster_path,
-                  }
-                : placeHolderImage
-            }
-          />
-          <View style={styles.centeredView}>
-            <View style={styles.playButton}>
-              <PlayButton />
-            </View>
-            <Text style={styles.movieName}>{moviesDetails.title}</Text>
-            {moviesDetails.genres && (
-              <View style={styles.genresView}>
-                {moviesDetails.genres.map(genre => {
-                  return (
-                    <Text style={styles.genresText} key={genre.id}>
-                      {genre.name}
-                    </Text>
-                  );
-                })}
+        <>
+          <ScrollView style={styles.container}>
+            <Image
+              style={styles.image}
+              resizeMode="cover"
+              source={
+                moviesDetails.poster_path
+                  ? {
+                      uri:
+                        'https://image.tmdb.org/t/p/w500/' +
+                        moviesDetails.poster_path,
+                    }
+                  : placeHolderImage
+              }
+            />
+            <View style={styles.centeredView}>
+              <View style={styles.playButton}>
+                <PlayButton handlePress={videoShown} />
               </View>
-            )}
-            <View style={styles.ratingView}>
-              {Array(Math.round(moviesDetails.vote_average / 2))
-                .fill()
-                .map((_, i) => (
-                  <Text style={[styles.genresText, {fontSize: 25}]} key={i}>
-                    ⭐️
-                  </Text>
-                ))}
+              <Text style={styles.movieName}>{moviesDetails.title}</Text>
+              {moviesDetails.genres && (
+                <View style={styles.genresView}>
+                  {moviesDetails.genres.map(genre => {
+                    return (
+                      <Text style={styles.genresText} key={genre.id}>
+                        {genre.name}
+                      </Text>
+                    );
+                  })}
+                </View>
+              )}
+              <View style={styles.ratingView}>
+                {Array(Math.round(moviesDetails.vote_average / 2))
+                  .fill()
+                  .map((_, i) => (
+                    <Text style={[styles.genresText, {fontSize: 25}]} key={i}>
+                      ⭐️
+                    </Text>
+                  ))}
+              </View>
+              <Text style={styles.overview}>{moviesDetails.overview}</Text>
+              <Text style={styles.realeaseDate}>
+                {'Release Date: ' +
+                  dateFormat(moviesDetails.release_date, 'mmmm dd, yyyy')}
+              </Text>
             </View>
-            <Text style={styles.overview}>{moviesDetails.overview}</Text>
-            <Text style={styles.realeaseDate}>
-              {'Release Date: ' +
-                dateFormat(moviesDetails.release_date, 'mmmm dd, yyyy')}
-            </Text>
-          </View>
-        </ScrollView>
+          </ScrollView>
+          <Modal animationType="slide" visible={modalVisible}>
+            <SafeAreaView style={styles.videoModal}>
+              {/* <Pressable onPress={videoShown}>
+                <Text>Hide</Text>
+              </Pressable> */}
+            </SafeAreaView>
+          </Modal>
+        </>
       )}
     </>
   );
@@ -142,5 +159,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -20,
     right: 18,
+  },
+  videoModal: {
+    flex: 1,
   },
 });
