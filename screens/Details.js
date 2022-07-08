@@ -12,6 +12,7 @@ import {getMovieDetails} from '../services/services';
 const placeHolderImage = require('../assets/images/placeholder.png');
 const {height} = Dimensions.get('window');
 import dateFormat from 'dateformat';
+import PlayButton from '../components/PlayButton';
 
 const Details = ({route, navigation}) => {
   const movieId = route.params.movieId;
@@ -55,6 +56,9 @@ const Details = ({route, navigation}) => {
             }
           />
           <View style={styles.centeredView}>
+            <View style={styles.playButton}>
+              <PlayButton />
+            </View>
             <Text style={styles.movieName}>{moviesDetails.title}</Text>
             {moviesDetails.genres && (
               <View style={styles.genresView}>
@@ -79,7 +83,7 @@ const Details = ({route, navigation}) => {
             <Text style={styles.overview}>{moviesDetails.overview}</Text>
             <Text style={styles.realeaseDate}>
               {'Release Date: ' +
-                dateFormat(moviesDetails.release_date, 'mmmm ds, yyyy')}
+                dateFormat(moviesDetails.release_date, 'mmmm dd, yyyy')}
             </Text>
           </View>
         </ScrollView>
@@ -133,5 +137,10 @@ const styles = StyleSheet.create({
   realeaseDate: {
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  playButton: {
+    position: 'absolute',
+    top: -20,
+    right: 18,
   },
 });
