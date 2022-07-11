@@ -27,3 +27,22 @@ An android and IOS Mobile App created with React Native CLI  which shows movies 
  
  ### Preview
  ![Preview](https://github.com/IRSAGE/MoviesApp/blob/main/assets/images/progress/Day2.png?raw=true)
+ 
+ ## Day 3
+ 
+ ### Designing The Details Screen
+ 
+ - Calling the api to return full details of the movies by id.
+ - Designing and displaying full details of the movie.
+ 
+ ### Preview
+ ![Preview](https://github.com/IRSAGE/MoviesApp/blob/main/assets/images/progress/Day4.png?raw=true)
+ 
+  ## Day 4
+ 
+ ### Making Final touches 
+ 
+ - Basically day 4 was just wrapping up everything and making edits in styling on both the home screen and the details screen.
+ 
+ ### Preview
+ ![Preview](https://github.com/IRSAGE/MoviesApp/blob/main/assets/images/progress/Day5.png?raw=true)
